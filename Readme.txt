@@ -12,4 +12,7 @@ service
 repository
 เรียกข้อมูลจาก database
 
+
+คำสั่งพื้นฐาน
+go get .
 docker-compose up --build
