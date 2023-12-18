@@ -31,6 +31,13 @@ func main() {
     userRoute.Setup()
     db.DB.AutoMigrate(&models.User{})
 
+    CategoryRepository := repository.NewCategoryRepository(db)
+    CategoryService := service.NewCategoryService(CategoryRepository)
+    CategoryController := controller.NewCategoryController(CategoryService)
+    CategoryRoute := routes.NewCategoryRoute(CategoryController, router)
+    CategoryRoute.Setup()
+    db.DB.AutoMigrate(&models.Category{})
+
     
     router.Gin.Run(":8000") //server started on 8000 port
 }

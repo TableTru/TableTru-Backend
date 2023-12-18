@@ -34,7 +34,7 @@ func (u UserController) GetAllUser(ctx *gin.Context) {
 		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
 		return
 	}
-	respArr := make([]map[string]interface{}, 0, 0)
+	respArr := make([]map[string]interface{}, 0)
 
 	for _, n := range *data {
 		resp := n.ResponseMap()
