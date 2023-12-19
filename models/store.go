@@ -10,29 +10,30 @@ type Store struct {
 	ImageName    string    `gorm:"varchar(255)" json:"store_menu_image"`
 	TableBooking int       `json:"table_booking"`
 	SumRating    float64   `json:"sum_rating"`
-	OpenTime     time.Time `json:"open_time"`
-	CloseTime     time.Time `json:"close_time"`
+	OpenTime     time.Time `gorm:"type:datetime;default:NULL" json:"open_time"`
+	CloseTime    time.Time `gorm:"type:datetime;default:NULL" json:"close_time"`
 	CreatedAt    time.Time `json:"created_at,omitempty"`
 	UpdatedAt    time.Time `json:"updated_at,omitempty"`
 	Category     Category  `gorm:"foreignKey:CategoryID"`
 }
 
+
 func (store *Store) TableName() string {
-    return "store"
+	return "store"
 }
 
 func (store *Store) ResponseMap() map[string]interface{} {
-    resp := make(map[string]interface{})
-    resp["store_id"] = store.ID
-    resp["category_id"] = store.CategoryID
-    resp["store_name"] = store.Name
+	resp := make(map[string]interface{})
+	resp["store_id"] = store.ID
+	resp["category_id"] = store.CategoryID
+	resp["store_name"] = store.Name
 	resp["store_description"] = store.Description
 	resp["store_menu_image"] = store.ImageName
 	resp["table_booking"] = store.TableBooking
 	resp["sum_rating"] = store.SumRating
 	resp["open_time"] = store.OpenTime
 	resp["close_time"] = store.CloseTime
-    resp["created_at"] = store.CreatedAt
-    resp["updated_at"] = store.UpdatedAt
-    return resp
+	resp["created_at"] = store.CreatedAt
+	resp["updated_at"] = store.UpdatedAt
+	return resp
 }
