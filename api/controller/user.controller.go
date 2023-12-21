@@ -55,7 +55,7 @@ func (u *UserController) AddUser(ctx *gin.Context) {
 	var user models.User
 	ctx.ShouldBindJSON(&user)
 
-	if user.Name == "" {
+	if user.Username == "" {
 		util.ErrorJSON(ctx, http.StatusBadRequest, "Name is required")
 		return
 	}
