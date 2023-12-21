@@ -4,12 +4,12 @@ import "time"
 
 type PromotionCode struct {
 	ID          int64     `gorm:"primary_key;auto_increment" json:"promotion_code_id"`
-	PromotionID     int64     `json:"promotion_id"`
+	PromotionID int64     `json:"promotion_id"`
 	UserID      int64     `json:"user_id"`
 	Status      string    `gorm:"varchar(255)" json:"code_status"`
 	CreatedAt   time.Time `json:"created_at,omitempty"`
 	UpdatedAt   time.Time `json:"updated_at,omitempty"`
-	Promotion       Promotion     `gorm:"foreignKey:PromotionID"`
+	Promotion   Promotion `gorm:"foreignKey:PromotionID"`
 	User        User      `gorm:"foreignKey:UserID"`
 }
 
