@@ -57,12 +57,12 @@ func (p *StoreController) GetStore(ctx *gin.Context) {
 	}
 	var store models.Store
 	store.ID = id
-	foundPost, err := p.service.FindStore(store)
+	foundStore, err := p.service.FindStore(store)
 	if err != nil {
 		util.ErrorJSON(ctx, http.StatusBadRequest, "Error Finding Store")
 		return
 	}
-	response := foundPost.ResponseMap()
+	response := foundStore.ResponseMap()
 
 	ctx.JSON(http.StatusOK, &util.Response{
 		Success: true,

@@ -57,12 +57,12 @@ func (p *CategoryController) GetCategory(ctx *gin.Context) {
 	}
 	var category models.Category
 	category.ID = id
-	foundPost, err := p.service.FindCategory(category)
+	foundCategory, err := p.service.FindCategory(category)
 	if err != nil {
 		util.ErrorJSON(ctx, http.StatusBadRequest, "Error Finding Category")
 		return
 	}
-	response := foundPost.ResponseMap()
+	response := foundCategory.ResponseMap()
 
 	ctx.JSON(http.StatusOK, &util.Response{
 		Success: true,
