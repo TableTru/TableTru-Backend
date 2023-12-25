@@ -96,6 +96,19 @@ func main() {
     userRoute.Setup()
     db.DB.AutoMigrate(&models.User{})
 
-    
+    //Seed Data
+    categories := []models.Category{
+		{Name: "category1"},
+		{Name: "category2"},
+	}
+
+    stores := []models.Store{
+		{CategoryID: 1 , Name: "store1"},
+		{CategoryID: 1 , Name: "store2"},
+	}
+
+    CategoryRepository.SeedData(categories)
+    StoreRepository.SeedData(stores)
+
     router.Gin.Run(":8000") //server started on 8000 port
 }

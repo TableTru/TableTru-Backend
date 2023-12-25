@@ -15,6 +15,14 @@ func NewStoreRepository(db infrastructure.Database) StoreRepository {
 	}
 }
 
+func (r *StoreRepository) SeedData(stores []models.Store) error {
+	result := r.db.DB.Create(stores)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
 func (c StoreRepository) FindAll(store models.Store, keyword string) (*[]models.Store, int64, error) {
 	var stores []models.Store
 	var totalRows int64 = 0

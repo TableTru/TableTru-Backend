@@ -15,6 +15,14 @@ func NewCategoryRepository(db infrastructure.Database) CategoryRepository {
 	}
 }
 
+func (r *CategoryRepository) SeedData(categories []models.Category) error {
+	result := r.db.DB.Create(categories)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
 func (c CategoryRepository) FindAll(category models.Category, keyword string) (*[]models.Category, int64, error) {
 	var categories []models.Category
 	var totalRows int64 = 0
