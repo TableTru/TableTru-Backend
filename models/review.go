@@ -6,7 +6,7 @@ type Review struct {
 	ID        int64     `gorm:"primary_key;auto_increment" json:"review_id"`
 	StoreID   int64     `json:"store_id"`
 	UserID    int64     `json:"user_id"`
-	Comment   string    `gorm:"varchar(500)" json:"review_comment"`
+	Comment   string    `gorm:"type:VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"review_comment"`
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }

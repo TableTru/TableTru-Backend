@@ -5,7 +5,7 @@ import "time"
 type Location struct {
 	ID        int64     `gorm:"primary_key;auto_increment" json:"location_id"`
 	StoreID   int64     `json:"store_id"`
-	Name      string    `gorm:"varchar(255)" json:"location_name"`
+	Name      string    `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"location_name"`
 	ImageName string    `gorm:"varchar(255)" json:"location_image_name"`
 	Latitude  string    `gorm:"varchar(255)" json:"latitude"`
 	Longitude string    `gorm:"varchar(255)" json:"longitude"`

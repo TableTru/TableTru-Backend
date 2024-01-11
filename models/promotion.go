@@ -5,8 +5,8 @@ import "time"
 type Promotion struct {
 	ID             int64     `gorm:"primary_key;auto_increment" json:"promotion_id"`
 	StoreID        int64     `json:"store_id"`
-	Name           string    `gorm:"varchar(255)" json:"promotion_name"`
-	Description    string    `gorm:"varchar(255)" json:"promotion_description"`
+	Name           string    `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"promotion_name"`
+	Description    string    `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"promotion_description"`
 	ExpirationDate time.Time `gorm:"type:datetime;default:NULL" json:"expiration_date"`
 	CreatedAt      time.Time `json:"created_at,omitempty"`
 	UpdatedAt      time.Time `json:"updated_at,omitempty"`

@@ -6,7 +6,7 @@ type TableBooking struct {
 	ID          int64     `gorm:"primary_key;auto_increment" json:"table_booking_id"`
 	StoreID     int64     `json:"store_id"`
 	UserID      int64     `json:"user_id"`
-	Status      string    `gorm:"varchar(255)" json:"table_booking_status"`
+	Status      string    `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"table_booking_status"`
 	Count       int64     `json:"table_booking_count"`
 	BookingTime time.Time `gorm:"type:datetime;default:NULL" json:"table_booking_time"`
 	CreatedAt   time.Time `json:"created_at,omitempty"`

@@ -4,7 +4,7 @@ import "time"
 
 type Category struct {
 	ID        int64     `gorm:"primary_key;auto_increment" json:"category_id"`
-	Name      string    `gorm:"varchar(255)" json:"category_name"`
+	Name      string    `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"category_name"`
 	ImageName string    `gorm:"varchar(255)" json:"category_image"`
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	UpdatedAt time.Time `json:"updated_at,omitempty"`

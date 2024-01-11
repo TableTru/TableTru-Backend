@@ -5,8 +5,8 @@ import "time"
 type Store struct {
 	ID           int64     `gorm:"primary_key;auto_increment" json:"store_id"`
 	CategoryID   int64     `json:"category_id"`
-	Name         string    `gorm:"varchar(255)" json:"store_name"`
-	Description  string    `gorm:"varchar(500)" json:"store_description"`
+	Name         string    `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"store_name"`
+	Description  string    `gorm:"type:VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"store_description"`
 	ImageName    string    `gorm:"varchar(255)" json:"store_menu_image"`
 	TableBooking int       `json:"table_booking"`
 	SumRating    float64   `json:"sum_rating"`

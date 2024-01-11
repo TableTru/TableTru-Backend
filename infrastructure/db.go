@@ -20,8 +20,10 @@ func NewDatabase() Database {
     HOST := os.Getenv("DB_HOST")
     DBNAME := os.Getenv("DB_NAME")
 
-    URL := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", USER, PASS, 
-    HOST, DBNAME)
+    // URL := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", USER, PASS, 
+    // HOST, DBNAME)
+
+    URL := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local&collation=utf8mb4_unicode_ci", USER, PASS, HOST, DBNAME)
 
 	// URL := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", USER, PASS, 
     // HOST, DBNAME)
