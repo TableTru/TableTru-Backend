@@ -15,6 +15,14 @@ func NewLocationRepository(db infrastructure.Database) LocationRepository {
 	}
 }
 
+func (r *LocationRepository) SeedData(locations []models.Location) error {
+	result := r.db.DB.Create(locations)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
 func (c LocationRepository) FindAll(location models.Location, keyword string) (*[]models.Location, int64, error) {
 	var locations []models.Location
 	var totalRows int64 = 0
