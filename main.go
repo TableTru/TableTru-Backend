@@ -121,9 +121,16 @@ func main() {
 		{CategoryID: 1, LocationID: 1 ,Name: "store2"},
 	}
 
+    users := []models.User{
+		{Username: "user1", Password: "1234" , Status: "user"},
+        {Username: "user2", Password: "1234" , Status: "user"},
+        {Username: "user3", Password: "1234" , Status: "user"},
+	}
+
 	CategoryRepository.SeedData(categories)
 	LocationRepository.SeedData(locations)
 	StoreRepository.SeedData(stores)
+    userRepository.SeedData(users)
 
 	router.Gin.Run(":8000") //server started on 8000 port
 }

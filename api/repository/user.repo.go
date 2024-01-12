@@ -15,21 +15,25 @@ func NewUserRepository(db infrastructure.Database) UserRepository {
 	}
 }
 
-func (u UserRepository) CreateUser(user models.User) error {
-	return u.db.DB.Create(&user).Error
+func (r *UserRepository) SeedData(users []models.User) error {
+	result := r.db.DB.Create(users)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
 
-func (u UserRepository) FindAllUser(user models.User, keyword string) (*[]models.User, int64, error) {
+func (c UserRepository) FindAll(user models.User, keyword string) (*[]models.User, int64, error) {
 	var users []models.User
 	var totalRows int64 = 0
 
-	queryBuider := u.db.DB.Order("created_at desc").Model(&models.User{})
+	queryBuider := c.db.DB.Order("created_at desc").Model(&models.User{})
 
 	// Search parameter
 	if keyword != "" {
 		queryKeyword := "%" + keyword + "%"
 		queryBuider = queryBuider.Where(
-			u.db.DB.Where("user.name LIKE ? ", queryKeyword))
+			c.db.DB.Where("user.username LIKE ? ", queryKeyword))
 	}
 
 	err := queryBuider.
@@ -37,4 +41,26 @@ func (u UserRepository) FindAllUser(user models.User, keyword string) (*[]models
 		Find(&users).
 		Count(&totalRows).Error
 	return &users, totalRows, err
+}
+
+func (c UserRepository) Find(user models.User) (models.User, error) {
+	var users models.User
+	err := c.db.DB.
+		Debug().
+		Model(&models.User{}).
+		Where(&user).
+		Take(&users).Error
+	return users, err
+}
+
+func (c UserRepository) Create(user models.User) error {
+	return c.db.DB.Create(&user).Error
+}
+
+func (c UserRepository) Update(user models.User) error {
+	return c.db.DB.Save(&user).Error
+}
+
+func (c UserRepository) Delete(user models.User) error {
+	return c.db.DB.Delete(&user).Error
 }

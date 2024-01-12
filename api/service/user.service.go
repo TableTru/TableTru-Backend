@@ -18,9 +18,9 @@ func NewUserService(r repository.UserRepository) UserService {
 }
 
 func (u UserService) CreateUser(user models.User) error {
-	return u.repository.CreateUser(user)
+	return u.repository.Create(user)
 }
 
 func (u UserService) FindAllUser(user models.User, keyword string) (*[]models.User, int64, error) {
-	return u.repository.FindAllUser(user, keyword)
+	return u.repository.FindAll(user, keyword)
 }
