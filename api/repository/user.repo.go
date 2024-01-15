@@ -64,3 +64,13 @@ func (c UserRepository) Update(user models.User) error {
 func (c UserRepository) Delete(user models.User) error {
 	return c.db.DB.Delete(&user).Error
 }
+
+func (c UserRepository) FindLoginUser(username, password string) (models.User, error) {
+	var user models.User
+	err := c.db.DB.
+		Debug().
+		Model(&models.User{}).
+		Where("username = ? AND password = ?", username, password).
+		Take(&user).Error
+	return user, err
+}

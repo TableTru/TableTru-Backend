@@ -27,8 +27,10 @@ func (u UserRoute) Setup() {
 	{
 		user.GET("/", u.Controller.GetAllUser)
 		user.POST("/", u.Controller.AddUser)
-		// user.GET("/:id", u.Controller.GetPost)
-		// user.DELETE("/:id", u.Controller.DeletePost)
-		// user.PUT("/:id", u.Controller.UpdatePost)
+		user.GET("/:id", u.Controller.GetUser)
+		user.DELETE("/:id", u.Controller.DeleteUser)
+		user.PUT("/:id", u.Controller.UpdateUser)
+
+		user.GET("/getLoginUser", u.Controller.GetLoginUser)
 	}
 }
