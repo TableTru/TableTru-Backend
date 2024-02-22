@@ -9,6 +9,9 @@ type User struct {
 	Status    string    `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"user_status"`
 	Latitude  string    `gorm:"varchar(255)" json:"latitude"`
 	Longitude string    `gorm:"varchar(255)" json:"longitude"`
+	Email string `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"email"`
+	phone_num string `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"phone_num"`
+	profile_image string `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"profile_image"`
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }

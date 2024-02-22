@@ -6,6 +6,7 @@ type StoreImage struct {
 	ID        int64     `gorm:"primary_key;auto_increment" json:"store_image_id"`
 	StoreID   int64     `json:"store_id"`
 	ImageName string    `gorm:"varchar(255)" json:"store_image_name"`
+	ImageType string	`gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"store_image_type"`
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	Store     Store     `gorm:"foreignKey:StoreID"`
