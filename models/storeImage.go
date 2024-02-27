@@ -21,6 +21,7 @@ func (storeImage *StoreImage) ResponseMap() map[string]interface{} {
 	resp["store_image_id"] = storeImage.ID
 	resp["store_id"] = storeImage.StoreID
 	resp["store_image_name"] = storeImage.ImageName
+	resp["store_image_type"] = storeImage.ImageType
 	resp["created_at"] = storeImage.CreatedAt
 	resp["updated_at"] = storeImage.UpdatedAt
 	return resp
