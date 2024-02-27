@@ -10,6 +10,7 @@ type Review struct {
 	RatingScore int64     `json:"rating_score"`
 	CreatedAt   time.Time `json:"created_at,omitempty"`
 	UpdatedAt   time.Time `json:"updated_at,omitempty"`
+	Store     Store     `gorm:"foreignKey:StoreID"`
 }
 
 func (review *Review) TableName() string {
