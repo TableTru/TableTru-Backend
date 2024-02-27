@@ -4,6 +4,7 @@ import "time"
 
 type User struct {
 	ID        int64     `gorm:"primary_key;auto_increment" json:"user_id"`
+	StoreId   int64      `json:"store_id"`
 	Username  string    `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"username"`
 	Password  string    `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"password"`
 	Status    string    `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"user_status"`
