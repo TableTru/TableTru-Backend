@@ -30,5 +30,7 @@ func (u TableBookingRoute) Setup() {
 		tableBooking.GET("/:id", u.Controller.GetTableBooking)
 		tableBooking.DELETE("/:id", u.Controller.DeleteTableBooking)
 		tableBooking.PUT("/:id", u.Controller.UpdateTableBooking)
+
+		tableBooking.GET("/GetUserBookingByStatus", u.Controller.GetUserBookingByStatus)
 	}
 }

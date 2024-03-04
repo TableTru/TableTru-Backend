@@ -30,5 +30,7 @@ func (u StoreRoute) Setup() {
 		store.GET("/:id", u.Controller.GetStore)
 		store.DELETE("/:id", u.Controller.DeleteStore)
 		store.PUT("/:id", u.Controller.UpdateStore)
+
+		store.GET("/checkStoreByName", u.Controller.CheckStoreByName)
 	}
 }

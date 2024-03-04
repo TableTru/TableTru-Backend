@@ -144,3 +144,22 @@ func (p *StoreController) DeleteStore(ctx *gin.Context) {
 		Message: "Deleted Sucessfully"}
 	ctx.JSON(http.StatusOK, response)
 }
+
+func (p *StoreController) CheckStoreByName(ctx *gin.Context) {
+	storeName := ctx.Query("storeName")
+
+	var store models.Store
+	store.Name = storeName
+	foundStore, err := p.service.FindStore(store)
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Error Finding Store")
+		return
+	}
+	response := foundStore.ResponseMap()
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "Result set of Store",
+		Data:    &response})
+
+}

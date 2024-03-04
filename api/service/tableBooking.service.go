@@ -36,3 +36,7 @@ func (c TableBookingService) DeleteTableBooking(id int64) error {
 	tableBooking.ID = id
 	return c.repository.Delete(tableBooking)
 }
+
+func (c TableBookingService) FindAllUserBookingByStatus(tableBooking models.TableBooking) (*[]models.TableBooking, int64, error) {
+	return c.repository.FindAllUserBookingByStatus(tableBooking)
+}

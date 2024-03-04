@@ -144,3 +144,39 @@ func (p *TableBookingController) DeleteTableBooking(ctx *gin.Context) {
 		Message: "Deleted Sucessfully"}
 	ctx.JSON(http.StatusOK, response)
 }
+
+func (c TableBookingController) GetUserBookingByStatus(ctx *gin.Context) {
+	var tableBookings models.TableBooking
+
+	status := ctx.Query("status")
+	idParam := ctx.Query("UserId")
+	userId, err := strconv.ParseInt(idParam, 10, 64) //type conversion string to int64
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "id invalid")
+		return
+	}
+
+	tableBookings.UserID = userId
+	tableBookings.Status = status
+
+	data, total, err := c.service.FindAllUserBookingByStatus(tableBookings)
+
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
+		return
+	}
+	respArr := make([]map[string]interface{}, 0)
+
+	for _, n := range *data {
+		resp := n.ResponseMap()
+		respArr = append(respArr, resp)
+	}
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "TableBooking result set",
+		Data: map[string]interface{}{
+			"rows":       respArr,
+			"total_rows": total,
+		}})
+}

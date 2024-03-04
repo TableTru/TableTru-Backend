@@ -56,3 +56,23 @@ func (c TableBookingRepository) Update(tableBooking models.TableBooking) error {
 func (c TableBookingRepository) Delete(tableBooking models.TableBooking) error {
 	return c.db.DB.Delete(&tableBooking).Error
 }
+
+func (c TableBookingRepository) FindAllUserBookingByStatus(tableBooking models.TableBooking) (*[]models.TableBooking, int64, error) {
+	var tableBookings []models.TableBooking
+	var totalRows int64 = 0
+
+	queryBuider := c.db.DB.Order("created_at desc").Model(&models.TableBooking{})
+
+	// Search parameter
+	// if status != "" {
+	// 	queryKeyword := "%" + status + "%"
+	// 	queryBuider = queryBuider.Where(
+	// 		c.db.DB.Where("tableBooking.table_booking_status LIKE ? AND tableBooking.table_booking_id LIKE ? ", queryKeyword, id))
+	// }
+
+	err := queryBuider.
+		Where(tableBooking).
+		Find(&tableBookings).
+		Count(&totalRows).Error
+	return &tableBookings, totalRows, err
+}

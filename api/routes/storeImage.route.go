@@ -30,5 +30,7 @@ func (u StoreImageRoute) Setup() {
 		storeImage.GET("/:id", u.Controller.GetStoreImage)
 		storeImage.DELETE("/:id", u.Controller.DeleteStoreImage)
 		storeImage.PUT("/:id", u.Controller.UpdateStoreImage)
+
+		storeImage.GET("/GetStoreImageByType", u.Controller.GetStoreImageByType)
 	}
 }

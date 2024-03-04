@@ -56,3 +56,23 @@ func (c StoreImageRepository) Update(storeImage models.StoreImage) error {
 func (c StoreImageRepository) Delete(storeImage models.StoreImage) error {
 	return c.db.DB.Delete(&storeImage).Error
 }
+
+func (c StoreImageRepository) FindStoreImageByType(storeImage models.StoreImage) (*[]models.StoreImage, int64, error) {
+	var storeImages []models.StoreImage
+	var totalRows int64 = 0
+
+	queryBuider := c.db.DB.Order("created_at desc").Model(&models.StoreImage{})
+
+	// Search parameter
+	// if storeType != "" {
+	// 	queryKeyword := "%" + storeType + "%"
+	// 	queryBuider = queryBuider.Where(
+	// 		c.db.DB.Where("storeImage.store_image_type LIKE ? AND storeImage.store_id LIKE ? ", queryKeyword, id))
+	// }
+
+	err := queryBuider.
+		Where(storeImage).
+		Find(&storeImages).
+		Count(&totalRows).Error
+	return &storeImages, totalRows, err
+}

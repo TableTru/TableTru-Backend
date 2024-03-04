@@ -36,3 +36,7 @@ func (c StoreImageService) DeleteStoreImage(id int64) error {
 	storeImage.ID = id
 	return c.repository.Delete(storeImage)
 }
+
+func (c StoreImageService) FindStoreImageByType(storeImage models.StoreImage) (*[]models.StoreImage, int64, error) {
+	return c.repository.FindStoreImageByType(storeImage)
+}
