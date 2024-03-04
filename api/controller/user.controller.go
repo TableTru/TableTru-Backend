@@ -161,3 +161,19 @@ func (p *UserController) GetLoginUser(ctx *gin.Context) {
 		Data:    &response})
 
 }
+
+func (p *UserController) CheckRegisterUser(ctx *gin.Context) {
+	email := ctx.Query("email")
+	foundUser, err := p.service.CheckRegisterUser(email)
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Error Finding User")
+		return
+	}
+	response := foundUser.ResponseMap()
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "Result set of User",
+		Data:    &response})
+
+}

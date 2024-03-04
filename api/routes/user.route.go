@@ -32,5 +32,6 @@ func (u UserRoute) Setup() {
 		user.PUT("/:id", u.Controller.UpdateUser)
 
 		user.GET("/getLoginUser", u.Controller.GetLoginUser)
+		user.GET("/checkRegisterUser", u.Controller.CheckRegisterUser)
 	}
 }

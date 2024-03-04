@@ -8,6 +8,7 @@ type Store struct {
 	LocationID   int64      `json:"location_id"`
 	Name         string     `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"store_name"`
 	Description  string     `gorm:"type:VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"store_description"`
+	CoverImage   string     `gorm:"type:VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"store_cover_image"`
 	TableBooking int        `json:"table_booking"`
 	SumRating    float64    `json:"sum_rating"`
 	Latitude     string     `gorm:"varchar(255)" json:"latitude"`
@@ -18,7 +19,6 @@ type Store struct {
 	Category     Category   `gorm:"foreignKey:CategoryID"`
 	Location     Location   `gorm:"foreignKey:LocationID"`
 }
-
 
 func (store *Store) TableName() string {
 	return "store"
@@ -31,6 +31,7 @@ func (store *Store) ResponseMap() map[string]interface{} {
 	resp["location_id"] = store.LocationID
 	resp["store_name"] = store.Name
 	resp["store_description"] = store.Description
+	resp["store_cover_image"] = store.CoverImage
 	resp["table_booking"] = store.TableBooking
 	resp["sum_rating"] = store.SumRating
 	resp["latitude"] = store.Latitude

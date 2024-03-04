@@ -40,3 +40,7 @@ func (c UserService) DeleteUser(id int64) error {
 func (c UserService) FindLoginUser(username, password string) (models.User, error) {
 	return c.repository.FindLoginUser(username, password)
 }
+
+func (c UserService) CheckRegisterUser(email string) (models.User, error) {
+	return c.repository.CheckRegisterUser(email)
+}

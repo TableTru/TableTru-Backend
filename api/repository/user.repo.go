@@ -74,3 +74,13 @@ func (c UserRepository) FindLoginUser(username, password string) (models.User, e
 		Take(&user).Error
 	return user, err
 }
+
+func (c UserRepository) CheckRegisterUser(email string) (models.User, error) {
+	var user models.User
+	err := c.db.DB.
+		Debug().
+		Model(&models.User{}).
+		Where("email = ?", email).
+		Take(&user).Error
+	return user, err
+}

@@ -29,6 +29,7 @@ func (user *User) ResponseMap() map[string]interface{} {
 	resp["user_status"] = user.Status
 	resp["latitude"] = user.Latitude
 	resp["longitude"] = user.Longitude
+	resp["email"] = user.Email
 	resp["phone_num"] = user.PhoneNumber
 	resp["profile_image"] = user.ProfileImage
 	resp["created_at"] = user.CreatedAt
