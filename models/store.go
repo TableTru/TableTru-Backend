@@ -12,6 +12,7 @@ type Store struct {
 	SumRating    float64    `json:"sum_rating"`
 	Latitude     string     `gorm:"varchar(255)" json:"latitude"`
 	Longitude    string     `gorm:"varchar(255)" json:"longitude"`
+	OpenTimes    []OpenTime `gorm:"foreignKey:StoreID"`
 	CreatedAt    time.Time  `json:"created_at,omitempty"`
 	UpdatedAt    time.Time  `json:"updated_at,omitempty"`
 	Category     Category   `gorm:"foreignKey:CategoryID"`
@@ -34,6 +35,7 @@ func (store *Store) ResponseMap() map[string]interface{} {
 	resp["sum_rating"] = store.SumRating
 	resp["latitude"] = store.Latitude
 	resp["longitude"] = store.Longitude
+	resp["OpenTimes"] = store.OpenTimes
 	resp["created_at"] = store.CreatedAt
 	resp["updated_at"] = store.UpdatedAt
 	return resp

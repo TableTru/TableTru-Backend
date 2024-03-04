@@ -27,27 +27,29 @@ func (c StoreRepository) FindAll(store models.Store, keyword string) (*[]models.
 	var stores []models.Store
 	var totalRows int64 = 0
 
-	queryBuider := c.db.DB.Order("created_at desc").Model(&models.Store{})
+	queryBuilder := c.db.DB.Order("created_at desc").Model(&models.Store{})
 
 	// Search parameter
 	if keyword != "" {
 		queryKeyword := "%" + keyword + "%"
-		queryBuider = queryBuider.Where(
-			c.db.DB.Where("store.store_name LIKE ? ", queryKeyword))
+		queryBuilder = queryBuilder.Where("store_name LIKE ?", queryKeyword)
 	}
 
-	err := queryBuider.
+	err := queryBuilder.
+		Preload("OpenTimes").
 		Where(store).
 		Find(&stores).
 		Count(&totalRows).Error
 	return &stores, totalRows, err
 }
 
+
 func (c StoreRepository) Find(store models.Store) (models.Store, error) {
 	var stores models.Store
 	err := c.db.DB.
 		Debug().
 		Model(&models.Store{}).
+		Preload("OpenTimes").
 		Where(&store).
 		Take(&stores).Error
 	return stores, err

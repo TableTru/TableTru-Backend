@@ -75,7 +75,7 @@ func (p *OpenTimeController) AddOpenTime(ctx *gin.Context) {
 	var opentime models.OpenTime
 	ctx.ShouldBindJSON(&opentime)
 
-	if opentime.Name == "" {
+	if opentime.Day == "" {
 		util.ErrorJSON(ctx, http.StatusBadRequest, "Name is required")
 		return
 	}
@@ -107,7 +107,7 @@ func (p OpenTimeController) UpdateOpenTime(ctx *gin.Context) {
 	}
 	ctx.ShouldBindJSON(&opentimeRecord)
 
-	if opentimeRecord.Name == "" {
+	if opentimeRecord.Day == "" {
 		util.ErrorJSON(ctx, http.StatusBadRequest, "Name is required")
 		return
 	}
