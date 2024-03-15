@@ -39,6 +39,7 @@ func (store *Store) ResponseMap() map[string]interface{} {
 	resp["latitude"] = store.Latitude
 	resp["longitude"] = store.Longitude
 	resp["OpenTimes"] = store.OpenTimes
+	resp["category"] = store.Category
 	resp["created_at"] = store.CreatedAt
 	resp["updated_at"] = store.UpdatedAt
 	return resp
