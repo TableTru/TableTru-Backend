@@ -107,10 +107,10 @@ func (p TableBookingController) UpdateTableBooking(ctx *gin.Context) {
 	}
 	ctx.ShouldBindJSON(&tableBookingRecord)
 
-	if tableBooking.BookingTime.IsZero() {
-		util.ErrorJSON(ctx, http.StatusBadRequest, "BookingTime is required and must be a valid time")
-		return
-	}
+	// if tableBooking.BookingTime.IsZero() {
+	// 	util.ErrorJSON(ctx, http.StatusBadRequest, "BookingTime is required and must be a valid time")
+	// 	return
+	// }
 
 	if err := p.service.UpdateTableBooking(tableBookingRecord); err != nil {
 		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to store TableBooking")
@@ -157,6 +157,42 @@ func (c TableBookingController) GetUserBookingByStatus(ctx *gin.Context) {
 	}
 
 	tableBookings.UserID = userId
+	tableBookings.Status = status
+
+	data, total, err := c.service.FindAllUserBookingByStatus(tableBookings)
+
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
+		return
+	}
+	respArr := make([]map[string]interface{}, 0)
+
+	for _, n := range *data {
+		resp := n.ResponseMap()
+		respArr = append(respArr, resp)
+	}
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "TableBooking result set",
+		Data: map[string]interface{}{
+			"rows":       respArr,
+			"total_rows": total,
+		}})
+}
+
+func (c TableBookingController) GetStoreBookingByStatus(ctx *gin.Context) {
+	var tableBookings models.TableBooking
+
+	status := ctx.Query("status")
+	idParam := ctx.Query("StoreId")
+	storeId, err := strconv.ParseInt(idParam, 10, 64) //type conversion string to int64
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "id invalid")
+		return
+	}
+
+	tableBookings.StoreID = storeId
 	tableBookings.Status = status
 
 	data, total, err := c.service.FindAllUserBookingByStatus(tableBookings)

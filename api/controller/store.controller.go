@@ -125,7 +125,6 @@ func (p StoreController) UpdateStore(ctx *gin.Context) {
 	})
 }
 
-
 func (p *StoreController) DeleteStore(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 	id, err := strconv.ParseInt(idParam, 10, 64) //type conversion string to uint64
@@ -162,4 +161,36 @@ func (p *StoreController) CheckStoreByName(ctx *gin.Context) {
 		Message: "Result set of Store",
 		Data:    &response})
 
+}
+
+func (c StoreController) GetStoreByNum(ctx *gin.Context) {
+	var stores models.Store
+
+	keyword := ctx.Query("keyword")
+	numString := ctx.Query("num")
+	num, err := strconv.Atoi(numString)
+	if err != nil {
+		// กรณีเกิด error ในการแปลง
+	}
+
+	data, total, err := c.service.FindStoreByNum(stores, keyword, num)
+
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
+		return
+	}
+	respArr := make([]map[string]interface{}, 0)
+
+	for _, n := range *data {
+		resp := n.ResponseMap()
+		respArr = append(respArr, resp)
+	}
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "Store result set",
+		Data: map[string]interface{}{
+			"rows":       respArr,
+			"total_rows": total,
+		}})
 }

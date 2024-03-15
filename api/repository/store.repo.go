@@ -43,7 +43,6 @@ func (c StoreRepository) FindAll(store models.Store, keyword string) (*[]models.
 	return &stores, totalRows, err
 }
 
-
 func (c StoreRepository) Find(store models.Store) (models.Store, error) {
 	var stores models.Store
 	err := c.db.DB.
@@ -65,4 +64,25 @@ func (c StoreRepository) Update(store models.Store) error {
 
 func (c StoreRepository) Delete(store models.Store) error {
 	return c.db.DB.Delete(&store).Error
+}
+
+func (c StoreRepository) FindbyNumber(store models.Store, keyword string, num int) (*[]models.Store, int64, error) {
+	var stores []models.Store
+	var totalRows int64 = 0
+
+	queryBuilder := c.db.DB.Order("created_at desc").Model(&models.Store{})
+
+	// Search parameter
+	if keyword != "" {
+		queryKeyword := "%" + keyword + "%"
+		queryBuilder = queryBuilder.Where("store_name LIKE ?", queryKeyword)
+	}
+
+	err := queryBuilder.
+		Limit(num).
+		Preload("OpenTimes").
+		Where(store).
+		Find(&stores).
+		Count(&totalRows).Error
+	return &stores, totalRows, err
 }

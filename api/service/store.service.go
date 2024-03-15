@@ -36,3 +36,7 @@ func (c StoreService) DeleteStore(id int64) error {
 	store.ID = id
 	return c.repository.Delete(store)
 }
+
+func (c StoreService) FindStoreByNum(store models.Store, keyword string, num int) (*[]models.Store, int64, error) {
+	return c.repository.FindbyNumber(store, keyword, num)
+}
