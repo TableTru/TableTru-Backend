@@ -116,18 +116,13 @@ func main() {
 	// }
 
     // users := []models.User{
-	// 	{Username: "user1", Password: "1234" , Status: "user"},
-    //     {Username: "user2", Password: "1234" , Status: "user"},
-    //     {Username: "user3", Password: "1234" , Status: "user"},
-	// }
-
-	// openTimes := []models.OpenTime{
-	// 	{StoreID: 1, Day: "1234" , StartTime: time.Date(0, 1, 1, 17, 43, 0, 0, time.UTC),EndTime: time.Date(0, 1, 1, 17, 43, 0, 0, time.UTC)},
+	// 	{Username: "user1", Password: "por1111" , Status: "user"},
+    //     {Username: "user2", Password: "por1111" , Status: "user"},
+    //     {Username: "user3", Password: "por1111" , Status: "user"},
 	// }
 
 	// CategoryRepository.SeedData(categories)
 	// LocationRepository.SeedData(locations)
-	// OpenTimeRepository.SeedData(openTimes)
 	// StoreRepository.SeedData(stores)
     // userRepository.SeedData(users)
 
