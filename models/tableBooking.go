@@ -15,6 +15,7 @@ type TableBooking struct {
 	Store       Store     `gorm:"foreignKey:StoreID"`
 	User        User      `gorm:"foreignKey:UserID"`
 	Promotion	Promotion `gorm:"foreignKey:PromotionID"`
+	// StoreName   string    `gorm:"-" json:"store_name"`
 }
 
 func (tableBooking *TableBooking) TableName() string {
@@ -25,7 +26,7 @@ func (tableBooking *TableBooking) ResponseMap() map[string]interface{} {
 	resp := make(map[string]interface{})
 	resp["table_booking_id"] = tableBooking.ID
 	resp["store_id"] = tableBooking.StoreID
-	resp["store"] = tableBooking.Store
+	resp["store_name"] = tableBooking.Store.Name // เข้าถึงข้อมูล store_name ที่ preload มาได้
 	resp["user_id"] = tableBooking.UserID
 	resp["promotion_id"] = tableBooking.PromotionID
 	resp["table_booking_status"] = tableBooking.Status
