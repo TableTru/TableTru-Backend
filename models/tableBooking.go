@@ -25,6 +25,7 @@ func (tableBooking *TableBooking) ResponseMap() map[string]interface{} {
 	resp := make(map[string]interface{})
 	resp["table_booking_id"] = tableBooking.ID
 	resp["store_id"] = tableBooking.StoreID
+	resp["store"] = tableBooking.Store
 	resp["user_id"] = tableBooking.UserID
 	resp["promotion_id"] = tableBooking.PromotionID
 	resp["table_booking_status"] = tableBooking.Status

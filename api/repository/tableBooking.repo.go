@@ -29,6 +29,7 @@ func (c TableBookingRepository) FindAll(tableBooking models.TableBooking, keywor
 	}
 
 	err := queryBuider.
+		Preload("Store").
 		Where(tableBooking).
 		Find(&tableBookings).
 		Count(&totalRows).Error
