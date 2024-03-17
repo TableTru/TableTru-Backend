@@ -30,6 +30,7 @@ func (c TableBookingRepository) FindAll(tableBooking models.TableBooking, keywor
 
 	err := queryBuider.
 		Preload("Store").
+		Preload("Promotion").
 		Where(tableBooking).
 		Find(&tableBookings).
 		Count(&totalRows).Error
@@ -41,6 +42,8 @@ func (c TableBookingRepository) Find(tableBooking models.TableBooking) (models.T
 	err := c.db.DB.
 		Debug().
 		Model(&models.TableBooking{}).
+		Preload("Store").
+		Preload("Promotion").
 		Where(&tableBooking).
 		Take(&tableBookings).Error
 	return tableBookings, err

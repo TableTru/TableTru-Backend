@@ -144,3 +144,73 @@ func (p *ReviewController) DeleteReview(ctx *gin.Context) {
 		Message: "Deleted Sucessfully"}
 	ctx.JSON(http.StatusOK, response)
 }
+
+func (c ReviewController) GetAllReviewByStoreId(ctx *gin.Context) {
+	var reviews models.Review
+
+	keyword := ctx.Query("keyword")
+	idParam := ctx.Query("StoreId")
+	StoreId, err := strconv.ParseInt(idParam, 10, 64) //type conversion string to int64
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "id invalid")
+		return
+	}
+
+	reviews.StoreID = StoreId
+
+	data, total, err := c.service.FindAllReview(reviews, keyword)
+
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
+		return
+	}
+	respArr := make([]map[string]interface{}, 0)
+
+	for _, n := range *data {
+		resp := n.ResponseMap()
+		respArr = append(respArr, resp)
+	}
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "Review result set",
+		Data: map[string]interface{}{
+			"rows":       respArr,
+			"total_rows": total,
+		}})
+}
+
+func (c ReviewController) GetAllReviewByUserId(ctx *gin.Context) {
+	var reviews models.Review
+
+	keyword := ctx.Query("keyword")
+	idParam := ctx.Query("UserId")
+	UserId, err := strconv.ParseInt(idParam, 10, 64) //type conversion string to int64
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "id invalid")
+		return
+	}
+
+	reviews.UserID = UserId
+
+	data, total, err := c.service.FindAllReview(reviews, keyword)
+
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
+		return
+	}
+	respArr := make([]map[string]interface{}, 0)
+
+	for _, n := range *data {
+		resp := n.ResponseMap()
+		respArr = append(respArr, resp)
+	}
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "Review result set",
+		Data: map[string]interface{}{
+			"rows":       respArr,
+			"total_rows": total,
+		}})
+}

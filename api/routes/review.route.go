@@ -30,5 +30,8 @@ func (u ReviewRoute) Setup() {
 		review.GET("/:id", u.Controller.GetReview)
 		review.DELETE("/:id", u.Controller.DeleteReview)
 		review.PUT("/:id", u.Controller.UpdateReview)
+
+		review.GET("/getAllReviewByStoreId", u.Controller.GetAllReviewByStoreId)
+		review.GET("/getAllReviewByUserId", u.Controller.GetAllReviewByUserId)
 	}
 }

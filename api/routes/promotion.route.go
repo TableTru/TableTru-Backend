@@ -30,5 +30,8 @@ func (u PromotionRoute) Setup() {
 		promotion.GET("/:id", u.Controller.GetPromotion)
 		promotion.DELETE("/:id", u.Controller.DeletePromotion)
 		promotion.PUT("/:id", u.Controller.UpdatePromotion)
+		
+		promotion.GET("/GetAllPromotionByStoreId", u.Controller.GetAllPromotionByStoreId)
+		promotion.GET("/GetAllPromotionByUserId", u.Controller.GetAllPromotionByUserId)
 	}
 }

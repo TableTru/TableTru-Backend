@@ -29,6 +29,7 @@ func (tableBooking *TableBooking) ResponseMap() map[string]interface{} {
 	resp["store_name"] = tableBooking.Store.Name // เข้าถึงข้อมูล store_name ที่ preload มาได้
 	resp["user_id"] = tableBooking.UserID
 	resp["promotion_id"] = tableBooking.PromotionID
+	resp["promotion_name"] = tableBooking.Promotion.Name
 	resp["table_booking_status"] = tableBooking.Status
 	resp["table_booking_count"] = tableBooking.Count
 	resp["table_booking_time"] = tableBooking.BookingTime

@@ -144,3 +144,73 @@ func (p *PromotionController) DeletePromotion(ctx *gin.Context) {
 		Message: "Deleted Sucessfully"}
 	ctx.JSON(http.StatusOK, response)
 }
+
+func (c PromotionController) GetAllPromotionByStoreId(ctx *gin.Context) {
+	var promotions models.Promotion
+
+	keyword := ctx.Query("keyword")
+	idParam := ctx.Query("storeId")
+	storeId, err := strconv.ParseInt(idParam, 10, 64) //type conversion string to int64
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "id invalid")
+		return
+	}
+
+	promotions.StoreID = storeId
+
+	data, total, err := c.service.FindAllPromotion(promotions, keyword)
+
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
+		return
+	}
+	respArr := make([]map[string]interface{}, 0)
+
+	for _, n := range *data {
+		resp := n.ResponseMap()
+		respArr = append(respArr, resp)
+	}
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "Promotion result set",
+		Data: map[string]interface{}{
+			"rows":       respArr,
+			"total_rows": total,
+		}})
+}
+
+func (c PromotionController) GetAllPromotionByUserId(ctx *gin.Context) {
+	var promotions models.Promotion
+
+	keyword := ctx.Query("keyword")
+	idParam := ctx.Query("userId")
+	userId, err := strconv.ParseInt(idParam, 10, 64) //type conversion string to int64
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "id invalid")
+		return
+	}
+
+	promotions.StoreID = userId
+
+	data, total, err := c.service.FindAllPromotion(promotions, keyword)
+
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
+		return
+	}
+	respArr := make([]map[string]interface{}, 0)
+
+	for _, n := range *data {
+		resp := n.ResponseMap()
+		respArr = append(respArr, resp)
+	}
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "Promotion result set",
+		Data: map[string]interface{}{
+			"rows":       respArr,
+			"total_rows": total,
+		}})
+}
