@@ -151,17 +151,21 @@ func (p *StoreController) CheckStoreByName(ctx *gin.Context) {
 	store.Name = storeName
 	foundStore, err := p.service.FindStore(store)
 	if err != nil {
-		util.ErrorJSON(ctx, http.StatusBadRequest, "Error Finding Store")
-		return
+		ctx.JSON(http.StatusOK, &util.Response{
+			Success: false,
+			Message: "not found",
+		})
+	} else {
+		response := foundStore.ResponseMap()
+
+		ctx.JSON(http.StatusOK, &util.Response{
+			Success: true,
+			Message: "Result set of Store",
+			Data:    &response,
+		})
 	}
-	response := foundStore.ResponseMap()
-
-	ctx.JSON(http.StatusOK, &util.Response{
-		Success: true,
-		Message: "Result set of Store",
-		Data:    &response})
-
 }
+
 
 func (c StoreController) GetStoreByNum(ctx *gin.Context) {
 	var stores models.Store

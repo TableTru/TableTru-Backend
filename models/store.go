@@ -5,7 +5,6 @@ import "time"
 type Store struct {
 	ID               int64      `gorm:"primary_key;auto_increment" json:"store_id"`
 	CategoryID       int64      `json:"category_id"`
-	LocationID       int64      `json:"location_id"`
 	Name             string     `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"store_name"`
 	Description      string     `gorm:"type:VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"store_description"`
 	CoverImage       string     `gorm:"type:VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"store_cover_image"`
@@ -14,11 +13,11 @@ type Store struct {
 	SumRating        float64    `json:"sum_rating"`
 	Latitude         float64    `json:"latitude"`
 	Longitude        float64    `json:"longitude"`
+	Location        string    `json:"location"`
 	OpenTimes        []OpenTime `gorm:"foreignKey:StoreID"`
 	CreatedAt        time.Time  `json:"created_at,omitempty"`
 	UpdatedAt        time.Time  `json:"updated_at,omitempty"`
 	Category         Category   `gorm:"foreignKey:CategoryID"`
-	Location         Location   `gorm:"foreignKey:LocationID"`
 }
 
 func (store *Store) TableName() string {
@@ -29,7 +28,7 @@ func (store *Store) ResponseMap() map[string]interface{} {
 	resp := make(map[string]interface{})
 	resp["store_id"] = store.ID
 	resp["category_id"] = store.CategoryID
-	resp["location_id"] = store.LocationID
+	resp["location"] = store.Location
 	resp["store_name"] = store.Name
 	resp["store_description"] = store.Description
 	resp["store_cover_image"] = store.CoverImage
