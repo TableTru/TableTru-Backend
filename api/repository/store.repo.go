@@ -36,6 +36,7 @@ func (c StoreRepository) FindAll(store models.Store, keyword string) (*[]models.
 	}
 
 	err := queryBuilder.
+	Preload("Category").
 		Preload("OpenTimes").
 		Where(store).
 		Find(&stores).
@@ -48,6 +49,7 @@ func (c StoreRepository) Find(store models.Store) (models.Store, error) {
 	err := c.db.DB.
 		Debug().
 		Model(&models.Store{}).
+		Preload("Category").
 		Preload("OpenTimes").
 		Where(&store).
 		Take(&stores).Error
