@@ -84,7 +84,22 @@ func (p *StoreController) AddStore(ctx *gin.Context) {
 		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to create store")
 		return
 	}
-	util.SuccessJSON(ctx, http.StatusCreated, "Successfully Created Store")
+
+	storeRecord, err := p.service.FindStore(store)
+
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Store with given id not found")
+		return
+	}
+	ctx.ShouldBindJSON(&storeRecord)
+
+	response := storeRecord.ResponseMap()
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "Successfully Updated Store",
+		Data:    response,
+	})
 }
 
 func (p StoreController) UpdateStore(ctx *gin.Context) {

@@ -18,3 +18,7 @@ func ErrorJSON(c *gin.Context, statusCode int, data interface{}) {
 func SuccessJSON(c *gin.Context, statusCode int, data interface{}) {
 	c.JSON(statusCode, gin.H{"msg": data, "input": c.Request.Body})
 }
+
+func SuccessJSONWithRes(c *gin.Context, statusCode int, data interface{}) {
+	c.JSON(statusCode, gin.H{"msg": data, "input": c.Request.Body})
+}

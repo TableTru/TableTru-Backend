@@ -13,7 +13,7 @@ type Store struct {
 	SumRating        float64    `json:"sum_rating"`
 	Latitude         float64    `json:"latitude"`
 	Longitude        float64    `json:"longitude"`
-	Location        string    `json:"location"`
+	Location        string    `gorm:"type:VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"location"`
 	OpenTimes        []OpenTime `gorm:"foreignKey:StoreID"`
 	CreatedAt        time.Time  `json:"created_at,omitempty"`
 	UpdatedAt        time.Time  `json:"updated_at,omitempty"`
