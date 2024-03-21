@@ -47,7 +47,7 @@ type TimeObject struct {
 
 func (timeObject *TimeObject) ResponseMap() map[string]interface{} {
 	resp := make(map[string]interface{})
-	resp["table_booking_id"] = timeObject.StartTime
-	resp["store_id"] = timeObject.EndTime
+	resp["start_time"] = timeObject.StartTime
+	resp["end_time"] = timeObject.EndTime
 	return resp
 }

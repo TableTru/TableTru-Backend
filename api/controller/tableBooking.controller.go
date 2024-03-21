@@ -221,12 +221,21 @@ func (c TableBookingController) GetStoreBookingByStatus(ctx *gin.Context) {
 func (c TableBookingController) CheckBookingTime(ctx *gin.Context) {
 	var tableBookings models.TableBooking
 
+	idParam := ctx.Query("StoreId")
+	id, err := strconv.ParseInt(idParam, 10, 64) //type conversion string to int64
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "id invalid")
+		return
+	}
+	tableBookings.StoreID = id
+
 	keyword := ctx.Query("keyword")
 	maxCountString := ctx.Query("maxCount")
 	maxCount, err := strconv.Atoi(maxCountString)
 	if err != nil {
 		// กรณีเกิด error ในการแปลง
 		fmt.Printf("แปลงค่า int error")
+		maxCount = 0
 	}
 
 	data, total, err := c.service.CheckBooking(tableBookings, keyword, maxCount)

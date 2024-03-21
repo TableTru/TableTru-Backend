@@ -71,15 +71,24 @@ func (c TableBookingService) CheckBooking(tableBooking models.TableBooking, keyw
 		count := 1
 
 		for j := i + 1; j < len(timeObjects); j++ {
-			if timeObjects[j].StartTime.After(startTime) && timeObjects[j].StartTime.Before(endTime) {
+			if (timeObjects[j].StartTime.After(startTime) || timeObjects[j].StartTime.Equal(startTime)) && timeObjects[j].StartTime.Before(endTime) {
 				count++
 			}
 		}
-
+		
 		if count >= maxCount {
-			fmt.Printf("Number of overlapping time ranges for %s - %s: %d\n", startTime, endTime, count)
-			disableTimeObjects= append(disableTimeObjects, models.TimeObject{StartTime: startTime, EndTime: endTime})
-		}
+            found := false
+        for _, obj := range disableTimeObjects {
+            if obj.StartTime.Equal(startTime) {
+                found = true
+                break
+            }
+        }
+        if !found {
+            fmt.Printf("Number of overlapping time ranges for %s - %s: %d\n", startTime, endTime, count)
+            disableTimeObjects = append(disableTimeObjects, models.TimeObject{StartTime: startTime, EndTime: endTime})
+        }
+        }
 	}
 
 	return &disableTimeObjects, totalRows, nil
