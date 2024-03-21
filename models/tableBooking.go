@@ -39,3 +39,15 @@ func (tableBooking *TableBooking) ResponseMap() map[string]interface{} {
 	resp["updated_at"] = tableBooking.UpdatedAt
 	return resp
 }
+
+type TimeObject struct {
+	StartTime time.Time `json:"start_time"`
+	EndTime time.Time `json:"end_time"`
+}
+
+func (timeObject *TimeObject) ResponseMap() map[string]interface{} {
+	resp := make(map[string]interface{})
+	resp["table_booking_id"] = timeObject.StartTime
+	resp["store_id"] = timeObject.EndTime
+	return resp
+}

@@ -33,5 +33,6 @@ func (u TableBookingRoute) Setup() {
 
 		tableBooking.GET("/GetUserBookingByStatus", u.Controller.GetUserBookingByStatus)
 		tableBooking.GET("/GetStoreBookingByStatus", u.Controller.GetStoreBookingByStatus)
+		tableBooking.GET("/CheckBookingTime", u.Controller.CheckBookingTime)
 	}
 }
