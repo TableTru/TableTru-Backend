@@ -4,6 +4,7 @@ import (
 	"TableTru/api/service"
 	"TableTru/models"
 	"TableTru/util"
+	"fmt"
 	"net/http"
 
 	"strconv"
@@ -211,6 +212,39 @@ func (c TableBookingController) GetStoreBookingByStatus(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &util.Response{
 		Success: true,
 		Message: "TableBooking result set",
+		Data: map[string]interface{}{
+			"rows":       respArr,
+			"total_rows": total,
+		}})
+}
+
+func (c TableBookingController) CheckBookingTime(ctx *gin.Context) {
+	var tableBookings models.TableBooking
+
+	keyword := ctx.Query("keyword")
+	maxCountString := ctx.Query("maxCount")
+	maxCount, err := strconv.Atoi(maxCountString)
+	if err != nil {
+		// กรณีเกิด error ในการแปลง
+		fmt.Printf("แปลงค่า int error")
+	}
+
+	data, total, err := c.service.CheckBooking(tableBookings, keyword, maxCount)
+
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
+		return
+	}
+	respArr := make([]map[string]interface{}, 0)
+
+	for _, n := range *data {
+		resp := n.ResponseMap()
+		respArr = append(respArr, resp)
+	}
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "TimeObject result set",
 		Data: map[string]interface{}{
 			"rows":       respArr,
 			"total_rows": total,
