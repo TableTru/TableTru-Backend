@@ -221,12 +221,19 @@ func (c ReviewController) GetStoreRatingCount(ctx *gin.Context) {
 
 	keyword := ctx.Query("keyword")
 	ratingStatusString := ctx.Query("ratingStatus")
+	idParam := ctx.Query("StoreId")
+	id, err := strconv.ParseInt(idParam, 10, 64) //type conversion string to int64
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "StoreID invalid")
+		return
+	}
 	ratingStatus, err := strconv.ParseBool(ratingStatusString)
 	if err != nil {
 		fmt.Printf("แปลง bool พลาด")
 	}
 
 	reviews.RatingStatus = ratingStatus
+	reviews.StoreID = id
 
 	data, total, err := c.service.FindAllReview(reviews, keyword)
 
