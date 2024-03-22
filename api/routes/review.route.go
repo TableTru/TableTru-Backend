@@ -33,5 +33,6 @@ func (u ReviewRoute) Setup() {
 
 		review.GET("/getAllReviewByStoreId", u.Controller.GetAllReviewByStoreId)
 		review.GET("/getAllReviewByUserId", u.Controller.GetAllReviewByUserId)
+		review.GET("/GetStoreRatingCount", u.Controller.GetStoreRatingCount)
 	}
 }

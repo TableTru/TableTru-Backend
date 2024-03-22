@@ -4,6 +4,7 @@ import (
 	"TableTru/api/service"
 	"TableTru/models"
 	"TableTru/util"
+	"fmt"
 	"net/http"
 
 	"strconv"
@@ -192,6 +193,40 @@ func (c ReviewController) GetAllReviewByUserId(ctx *gin.Context) {
 	}
 
 	reviews.UserID = UserId
+
+	data, total, err := c.service.FindAllReview(reviews, keyword)
+
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
+		return
+	}
+	respArr := make([]map[string]interface{}, 0)
+
+	for _, n := range *data {
+		resp := n.ResponseMap()
+		respArr = append(respArr, resp)
+	}
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "Review result set",
+		Data: map[string]interface{}{
+			"rows":       respArr,
+			"total_rows": total,
+		}})
+}
+
+func (c ReviewController) GetStoreRatingCount(ctx *gin.Context) {
+	var reviews models.Review
+
+	keyword := ctx.Query("keyword")
+	ratingStatusString := ctx.Query("ratingStatus")
+	ratingStatus, err := strconv.ParseBool(ratingStatusString)
+	if err != nil {
+		fmt.Printf("แปลง bool พลาด")
+	}
+
+	reviews.RatingStatus = ratingStatus
 
 	data, total, err := c.service.FindAllReview(reviews, keyword)
 
