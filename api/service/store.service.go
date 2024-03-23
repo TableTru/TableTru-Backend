@@ -40,3 +40,7 @@ func (c StoreService) DeleteStore(id int64) error {
 func (c StoreService) FindStoreByNum(store models.Store, keyword string, num int) (*[]models.Store, int64, error) {
 	return c.repository.FindbyNumber(store, keyword, num)
 }
+
+func (c StoreService) SearchStoreRatingSort(store models.Store, keyword string) (*[]models.Store, int64, error) {
+	return c.repository.SearchStoreRatingSort(store, keyword)
+}
