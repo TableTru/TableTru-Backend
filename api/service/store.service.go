@@ -44,3 +44,8 @@ func (c StoreService) FindStoreByNum(store models.Store, keyword string, num int
 func (c StoreService) SearchStoreRatingSort(store models.Store, keyword string) (*[]models.Store, int64, error) {
 	return c.repository.SearchStoreRatingSort(store, keyword)
 }
+
+func (c StoreService) SearchStoreLocationSort(store models.Store, originLocation string, keyword string) (*[]models.Store, int64, error) {
+    stores, totalRows, _, err := c.repository.SearchStoreLocationSort(store, originLocation, keyword)
+    return stores, totalRows, err
+}

@@ -33,6 +33,8 @@ func (u StoreRoute) Setup() {
 
 		store.GET("/checkStoreByName", u.Controller.CheckStoreByName)
 		store.GET("/getStorePreview", u.Controller.GetStoreByNum)
+		store.GET("/SearchStoreSortRating", u.Controller.SearchStoreSortRating)
+		store.GET("/SearchStoreSortDistance", u.Controller.SearchStoreSortDistance)
 		
 	}
 }

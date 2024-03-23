@@ -272,53 +272,31 @@ func (c StoreController) SearchStoreSortDistance(ctx *gin.Context) {
 	var searchInput models.SearchInput
 	var stores models.Store
 
-	// keyword := ctx.Query("keyword")
 	ctx.ShouldBindJSON(&searchInput)
 
 	keyword := searchInput.Search
 
+	originLocation := searchInput.Location
+
 	respArr := make([]map[string]interface{}, 0)
 
-	//เรียงตาม rating
-	if searchInput.CategoryID != 0 {
-		stores.CategoryID = searchInput.CategoryID
-		data, total, err := c.service.SearchStoreRatingSort(stores, keyword)
-		if err != nil {
-			util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
-			return
-		}
+	data, total,  err := c.service.SearchStoreLocationSort(stores,originLocation, keyword)
 
-		for _, n := range *data {
-			resp := n.ResponseMap()
-			respArr = append(respArr, resp)
-		}
-
-		ctx.JSON(http.StatusOK, &util.Response{
-			Success: true,
-			Message: "Store result set",
-			Data: map[string]interface{}{
-				"rows":       respArr,
-				"total_rows": total,
-			}})
-	} else {
-		data, total, err := c.service.FindAllStore(stores, keyword)
-		if err != nil {
-			util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
-			return
-		}
-
-		for _, n := range *data {
-			resp := n.ResponseMap()
-			respArr = append(respArr, resp)
-		}
-
-		ctx.JSON(http.StatusOK, &util.Response{
-			Success: true,
-			Message: "Store result set",
-			Data: map[string]interface{}{
-				"rows":       respArr,
-				"total_rows": total,
-			}})
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
+		return
 	}
 
+	for _, n := range *data {
+		resp := n.ResponseMap()
+		respArr = append(respArr, resp)
+	}
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "Store result set",
+		Data: map[string]interface{}{
+			"rows":       respArr,
+			"total_rows": total,
+		}})
 }

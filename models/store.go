@@ -50,20 +50,7 @@ type SearchInput struct {
 	CategoryID int64  `json:"category_id"`
 }
 
-type StoreWithDistance struct {
-	ID               int64      `gorm:"primary_key;auto_increment" json:"store_id"`
-	CategoryID       int64      `json:"category_id"`
-	Name             string     `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"store_name"`
-	Description      string     `gorm:"type:VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"store_description"`
-	CoverImage       string     `gorm:"type:VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"store_cover_image"`
-	TableBooking     int64      `json:"table_booking"`
-	MaxPeopleBooking int64      `json:"max_people_booking"`
-	SumRating        float64    `json:"sum_rating"`
-	Latitude         float64    `json:"latitude"`
-	Longitude        float64    `json:"longitude"`
-	Location         string     `gorm:"type:VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"location"`
-	OpenTimes        []OpenTime `gorm:"foreignKey:StoreID"`
-	CreatedAt        time.Time  `json:"created_at,omitempty"`
-	UpdatedAt        time.Time  `json:"updated_at,omitempty"`
-	Category         Category   `gorm:"foreignKey:CategoryID"`
+type StoreDistanceWithIndex struct {
+	Index     int `json:"index"`
+	Distance   int `json:"distance"`
 }

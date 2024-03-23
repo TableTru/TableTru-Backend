@@ -3,9 +3,9 @@ package repository
 import (
 	"TableTru/infrastructure"
 	"TableTru/models"
+	"fmt"
 
 	"context"
-	"fmt"
 	"log"
 
 	"googlemaps.github.io/maps"
@@ -116,7 +116,7 @@ func (c StoreRepository) SearchStoreRatingSort(store models.Store, keyword strin
 	return &stores, totalRows, err
 }
 
-func (c StoreRepository) SearchStoreLocationSort(store models.Store, originLocation string, keyword string) (*[]models.Store, int64, error) {
+func (c StoreRepository) SearchStoreLocationSort(store models.Store, originLocation string, keyword string) (*[]models.Store, int64, []models.StoreDistanceWithIndex, error) {
 	apiKey := "AIzaSyAuPMpFFFGWcocgnd1axgKUHSa2poG9rNY"
 	client, apiErr := maps.NewClient(maps.WithAPIKey(apiKey))
 	if apiErr != nil {
@@ -141,17 +141,32 @@ func (c StoreRepository) SearchStoreLocationSort(store models.Store, originLocat
 		Find(&stores).
 		Count(&totalRows).Error
 
-	destinations := []string{"Chiang Mai, Thailand", "Phuket, Thailand", "Pattaya, Thailand"}
+	var destinations []string
+	for _, store := range stores {
+		destinations = append(destinations, store.Location)
+	}
 
 	r := &maps.DistanceMatrixRequest{
 		Origins:      []string{originLocation},
 		Destinations: destinations,
 	}
 
-	resp, err := client.DistanceMatrix(context.Background(), r)
-	if err != nil {
-		log.Fatalf("DistanceMatrix request failed: %v", err)
+	resp, reqErr := client.DistanceMatrix(context.Background(), r)
+	if reqErr != nil {
+		log.Fatalf("DistanceMatrix request failed: %v", reqErr)
+	}
+	var distances []models.StoreDistanceWithIndex
+
+	for i, row := range resp.Rows {
+		for j, element := range row.Elements {
+			distance := element.Distance.Meters / 1000 // convert to kilometers
+			distances = append(distances, models.StoreDistanceWithIndex{
+				Index:    i,
+				Distance: distance,
+			})
+			fmt.Printf("Distance from %s to %s: %d km\n", originLocation, destinations[j], distance)
+		}
 	}
 
-	return &stores, totalRows, err
+	return &stores, totalRows, distances, err
 }
