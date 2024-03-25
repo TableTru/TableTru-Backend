@@ -225,5 +225,13 @@ func (c StoreRepository) SearchStoreLocationSort(store models.Store, originLocat
 		}
 	}
 
+	for _, store := range stores {
+		fmt.Printf("ID: %d, Location: %s\n", store.ID, store.Location)
+	}
+
+	for _, distance := range distances {
+		fmt.Printf("Index: %d, Distance: %d\n", distance.Index, distance.Distance)
+	}
+
 	return &stores, totalRows, distances, err
 }
