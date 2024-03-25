@@ -285,6 +285,10 @@ func (c StoreController) SearchStoreSortDistance(ctx *gin.Context) {
 
 	fmt.Printf("originLocation: %s\n", originLocation)
 
+	if searchInput.CategoryID != 0 {
+		stores.CategoryID = searchInput.CategoryID
+	}
+
 	respArr := make([]map[string]interface{}, 0)
 
 	data, total,  err := c.service.SearchStoreLocationSort(stores,originLocation, keyword)
