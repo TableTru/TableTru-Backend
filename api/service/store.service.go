@@ -47,16 +47,46 @@ func (c StoreService) SearchStoreRatingSort(store models.Store, keyword string) 
 	return c.repository.SearchStoreRatingSort(store, keyword)
 }
 
-func (c StoreService) SearchStoreLocationSort(store models.Store, originLocation string, keyword string) (*[]models.Store, int64, error) {
+func (c StoreService) SearchStoreLocationSort(store models.Store, originLocation string, keyword string) ([]models.Store, int64, error) {
     stores, totalRows, distancesArray, err := c.repository.SearchStoreLocationSort(store, originLocation, keyword)
-	sort.Slice(distancesArray, func(i, j int) bool {
-		return distancesArray[i].Distance < distancesArray[j].Distance
+
+	filter := func(arr []models.StoreDistanceWithIndex) []models.StoreDistanceWithIndex {
+		var filtered []models.StoreDistanceWithIndex
+		for _, d := range arr {
+			if d.StoreLocationStatus {
+				filtered = append(filtered, d)
+			}
+		}
+		return filtered
+	}
+
+	// Filter out elements where StoreLocationStatus is false
+	newDistances := filter(distancesArray)
+	
+	sort.Slice(newDistances, func(i, j int) bool {
+		return newDistances[i].Distance < newDistances[j].Distance
 	})
 
 	// Print the sorted distances
-	for _, distance := range distancesArray {
+	for _, distance := range newDistances {
 		fmt.Printf("Store ID: %d, Distance: %d\n", distance.StoreID, distance.Distance)
 	}
 
-    return stores, totalRows, err
+	filterStores := func(arr []models.Store, distArr []models.StoreDistanceWithIndex) []models.Store {
+        var filtered []models.Store
+        for _, s := range arr {
+            for _, d := range distArr {
+                if s.ID == d.StoreID {
+                    filtered = append(filtered, s)
+                    break
+                }
+            }
+        }
+        return filtered
+    }
+
+    // Filter stores based on ID matching StoreID in newDistances
+    filteredStores := filterStores(*stores, newDistances)
+
+    return filteredStores, totalRows, err
 }

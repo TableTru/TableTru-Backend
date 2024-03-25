@@ -278,6 +278,10 @@ func (c StoreController) SearchStoreSortDistance(ctx *gin.Context) {
 	keyword := searchInput.Search
 
 	originLocation := searchInput.Location
+	if searchInput.Location == "" {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "originLocation is required")
+		return
+	}
 
 	fmt.Printf("originLocation: %s\n", originLocation)
 
@@ -290,7 +294,7 @@ func (c StoreController) SearchStoreSortDistance(ctx *gin.Context) {
 		return
 	}
 
-	for _, n := range *data {
+	for _, n := range data {
 		resp := n.ResponseMap()
 		respArr = append(respArr, resp)
 	}

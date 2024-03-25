@@ -54,6 +54,7 @@ type StoreDistanceWithIndex struct {
 	Index    int   `json:"index"`
 	StoreID  int64 `json:"store_id"`
 	Distance int   `json:"distance"`
+	StoreLocationStatus bool `json:"status"`
 }
 
 type StoreDestination struct {

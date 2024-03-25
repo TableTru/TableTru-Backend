@@ -202,6 +202,13 @@ func (c StoreRepository) SearchStoreLocationSort(store models.Store, originLocat
 	for _, store := range stores {
 		if store.Location != "" {
 			destinations = append(destinations, store.Location)
+		} else{
+			distances = append(distances, models.StoreDistanceWithIndex{
+				Index:    0,
+				StoreID:  int64(store.ID),
+				Distance: 0,
+				StoreLocationStatus: false,
+			})
 		}
 	}
 
@@ -222,6 +229,7 @@ func (c StoreRepository) SearchStoreLocationSort(store models.Store, originLocat
 				Index:    j,
 				StoreID:  int64(stores[j].ID),
 				Distance: distance,
+				StoreLocationStatus: true,
 			})
 			fmt.Printf("Distance from %s to %s: %d km\n", originLocation, destinations[j], distance)
 		}
