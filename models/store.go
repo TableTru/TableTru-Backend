@@ -51,11 +51,12 @@ type SearchInput struct {
 }
 
 type StoreDistanceWithIndex struct {
-	Index     int `json:"index"`
-	Distance   int `json:"distance"`
+	Index    int   `json:"index"`
+	StoreID  int64 `json:"store_id"`
+	Distance int   `json:"distance"`
 }
 
 type StoreDestination struct {
-    Location string
-    ID       int64
+	Location string
+	ID       int64
 }

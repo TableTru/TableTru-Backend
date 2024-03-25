@@ -171,70 +171,55 @@ func (c StoreRepository) SearchStoreRatingSort(store models.Store, keyword strin
 // 	return &stores, totalRows, distances, err
 // }
 
-
 func (c StoreRepository) SearchStoreLocationSort(store models.Store, originLocation string, keyword string) (*[]models.Store, int64, []models.StoreDistanceWithIndex, error) {
-    apiKey := "AIzaSyAuPMpFFFGWcocgnd1axgKUHSa2poG9rNY"
-    client, apiErr := maps.NewClient(maps.WithAPIKey(apiKey))
-    if apiErr != nil {
-        log.Fatalf("Failed to create client: %v", apiErr)
-    }
+	apiKey := "AIzaSyAuPMpFFFGWcocgnd1axgKUHSa2poG9rNY"
+	client, apiErr := maps.NewClient(maps.WithAPIKey(apiKey))
+	if apiErr != nil {
+		log.Fatalf("Failed to create client: %v", apiErr)
+	}
 
-    var stores []models.Store
-    var totalRows int64 = 0
+	var stores []models.Store
+	var totalRows int64 = 0
 
-    queryBuilder := c.db.DB.Order("sum_rating desc").Model(&models.Store{})
+	queryBuilder := c.db.DB.Order("sum_rating desc").Model(&models.Store{})
 
-    // Search parameter
-    if keyword != "" {
-        queryKeyword := "%" + keyword + "%"
-        queryBuilder = queryBuilder.Where("store_name LIKE ?", queryKeyword)
-    }
+	// Search parameter
+	if keyword != "" {
+		queryKeyword := "%" + keyword + "%"
+		queryBuilder = queryBuilder.Where("store_name LIKE ?", queryKeyword)
+	}
 
-    err := queryBuilder.
-        Preload("Category").
-        Preload("OpenTimes").
-        Where(store).
-        Find(&stores).
-        Count(&totalRows).Error
+	err := queryBuilder.
+		Preload("Category").
+		Preload("OpenTimes").
+		Where(store).
+		Find(&stores).
+		Count(&totalRows).Error
 
-    var destinations []models.StoreDestination
-    for _, store := range stores {
-        destinations = append(destinations, models.StoreDestination{
-            Location: store.Location,
-            ID:       store.ID,
-        })
-    }
+	var destinations []string
+	var distances []models.StoreDistanceWithIndex
 
-    r := &maps.DistanceMatrixRequest{
-        Origins:      []string{originLocation},
-        Destinations: destinationsToStringSlice(destinations),
-    }
+	r := &maps.DistanceMatrixRequest{
+		Origins:      []string{originLocation},
+		Destinations: destinations,
+	}
 
-    resp, reqErr := client.DistanceMatrix(context.Background(), r)
-    if reqErr != nil {
-        log.Fatalf("DistanceMatrix request failed: %v", reqErr)
-    }
-    var distances []models.StoreDistanceWithIndex
+	resp, disTanceErr := client.DistanceMatrix(context.Background(), r)
+	if disTanceErr != nil {
+		log.Fatalf("DistanceMatrix request failed: %v", disTanceErr)
+	}
 
-    for i, row := range resp.Rows {
-        for j, element := range row.Elements {
-            distance := element.Distance.Meters / 1000 // convert to kilometers
-            distances = append(distances, models.StoreDistanceWithIndex{
-                Index:    i,
-                Distance: distance,
-            })
-            fmt.Printf("Distance from %s to %s: %d km\n", originLocation, destinations[j].Location, distance)
-        }
-    }
+	for i, row := range resp.Rows {
+		for j, element := range row.Elements {
+			distance := element.Distance.Meters / 1000 // convert to kilometers
+			distances = append(distances, models.StoreDistanceWithIndex{
+				Index:    i,
+				StoreID:  int64(stores[i].ID),
+				Distance: distance,
+			})
+			fmt.Printf("Distance from %s to %s: %d km\n", originLocation, destinations[j], distance)
+		}
+	}
 
-    return &stores, totalRows, distances, err
-}
-
-// Function to convert StoreDestination slice to []string
-func destinationsToStringSlice(destinations []models.StoreDestination) []string {
-    var destinationStrings []string
-    for _, d := range destinations {
-        destinationStrings = append(destinationStrings, d.Location)
-    }
-    return destinationStrings
+	return &stores, totalRows, distances, err
 }
