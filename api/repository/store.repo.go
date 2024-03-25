@@ -198,6 +198,10 @@ func (c StoreRepository) SearchStoreLocationSort(store models.Store, originLocat
 
 	var destinations []string
 	var distances []models.StoreDistanceWithIndex
+	
+	for _, store := range stores {
+		destinations = append(destinations, store.Location)
+	}
 
 	r := &maps.DistanceMatrixRequest{
 		Origins:      []string{originLocation},
