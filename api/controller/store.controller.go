@@ -4,6 +4,7 @@ import (
 	"TableTru/api/service"
 	"TableTru/models"
 	"TableTru/util"
+	"fmt"
 	"net/http"
 
 	"strconv"
@@ -277,6 +278,8 @@ func (c StoreController) SearchStoreSortDistance(ctx *gin.Context) {
 	keyword := searchInput.Search
 
 	originLocation := searchInput.Location
+
+	fmt.Printf("originLocation: %s\n", originLocation)
 
 	respArr := make([]map[string]interface{}, 0)
 

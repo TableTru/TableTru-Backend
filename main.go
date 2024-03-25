@@ -111,8 +111,8 @@ func main() {
 	// }
 
 	// stores := []models.Store{
-	// 	{CategoryID: 1 , Name: "store1"},
-	// 	{CategoryID: 1 ,Name: "store2"},
+	// 	{CategoryID: 1 , Name: "store1", Location: "16/9 ถ. หอวัง แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10900 ประเทศไทย"},
+	// 	{CategoryID: 1 ,Name: "store2", Location: "Lat Yao, Chatuchak, Bangkok 10900"},
 	// }
 
     // users := []models.User{
