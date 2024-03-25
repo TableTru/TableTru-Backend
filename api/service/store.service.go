@@ -3,6 +3,8 @@ package service
 import (
 	"TableTru/api/repository"
 	"TableTru/models"
+	"fmt"
+	"sort"
 )
 
 type StoreService struct {
@@ -46,6 +48,15 @@ func (c StoreService) SearchStoreRatingSort(store models.Store, keyword string) 
 }
 
 func (c StoreService) SearchStoreLocationSort(store models.Store, originLocation string, keyword string) (*[]models.Store, int64, error) {
-    stores, totalRows, _, err := c.repository.SearchStoreLocationSort(store, originLocation, keyword)
+    stores, totalRows, distancesArray, err := c.repository.SearchStoreLocationSort(store, originLocation, keyword)
+	sort.Slice(distancesArray, func(i, j int) bool {
+		return distancesArray[i].Distance < distancesArray[j].Distance
+	})
+
+	// Print the sorted distances
+	for _, distance := range distancesArray {
+		fmt.Printf("Store ID: %d, Distance: %d\n", distance.StoreID, distance.Distance)
+	}
+
     return stores, totalRows, err
 }

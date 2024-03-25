@@ -213,12 +213,12 @@ func (c StoreRepository) SearchStoreLocationSort(store models.Store, originLocat
 		log.Fatalf("DistanceMatrix request failed: %v", disTanceErr)
 	}
 
-	for i, row := range resp.Rows {
+	for _, row := range resp.Rows {
 		for j, element := range row.Elements {
 			distance := element.Distance.Meters / 1000 // convert to kilometers
 			distances = append(distances, models.StoreDistanceWithIndex{
-				Index:    i,
-				StoreID:  int64(stores[i].ID),
+				Index:    j,
+				StoreID:  int64(stores[j].ID),
 				Distance: distance,
 			})
 			fmt.Printf("Distance from %s to %s: %d km\n", originLocation, destinations[j], distance)
