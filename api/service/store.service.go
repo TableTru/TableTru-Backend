@@ -72,21 +72,18 @@ func (c StoreService) SearchStoreLocationSort(store models.Store, originLocation
 		fmt.Printf("Store ID: %d, Distance: %d\n", distance.StoreID, distance.Distance)
 	}
 
-	filterStores := func(arr []models.Store, distArr []models.StoreDistanceWithIndex) []models.Store {
+	filterStores := func(arr []models.Store) []models.Store {
         var filtered []models.Store
-        for _, s := range arr {
-            for _, d := range distArr {
-                if s.ID == d.StoreID {
-                    filtered = append(filtered, s)
-                    break
-                }
-            }
-        }
+        filtered = append(filtered, arr...)
         return filtered
     }
 
     // Filter stores based on ID matching StoreID in newDistances
-    filteredStores := filterStores(*stores, newDistances)
+    filteredStores := filterStores(*stores)
+
+	sort.Slice(filteredStores, func(i, j int) bool {
+		return filteredStores[i].ID < filteredStores[j].ID
+	})
 
     return filteredStores, totalRows, err
 }
