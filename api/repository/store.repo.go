@@ -81,7 +81,7 @@ func (c StoreRepository) FindbyNumber(store models.Store, keyword string, num in
 	// Search parameter
 	if keyword != "" {
 		queryKeyword := "%" + keyword + "%"
-		queryBuilder = queryBuilder.Where("store_name LIKE ?", queryKeyword)
+		queryBuilder = queryBuilder.Where("store.store_name LIKE ?", queryKeyword)
 	}
 
 	err := queryBuilder.
@@ -102,7 +102,7 @@ func (c StoreRepository) SearchStoreRatingSort(store models.Store, keyword strin
 	// Search parameter
 	if keyword != "" {
 		queryKeyword := "%" + keyword + "%"
-		queryBuilder = queryBuilder.Where("store_name LIKE ?", queryKeyword)
+		queryBuilder = queryBuilder.Where("store.store_name LIKE ?", queryKeyword)
 	}
 
 	err := queryBuilder.
