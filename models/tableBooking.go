@@ -27,6 +27,7 @@ func (tableBooking *TableBooking) ResponseMap() map[string]interface{} {
 	resp["table_booking_id"] = tableBooking.ID
 	resp["store_id"] = tableBooking.StoreID
 	resp["store_name"] = tableBooking.Store.Name // เข้าถึงข้อมูล store_name ที่ preload มาได้
+	resp["store_location"] = tableBooking.Store.Location // เข้าถึงข้อมูล store_name ที่ preload มาได้
 	resp["user_id"] = tableBooking.UserID
 	resp["user_name"] = tableBooking.User.Username
 	resp["phone_number"] = tableBooking.User.PhoneNumber
