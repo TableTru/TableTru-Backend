@@ -15,7 +15,7 @@ type User struct {
 	ProfileImage string    `gorm:"type:VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" json:"profile_image"`
 	CreatedAt    time.Time `json:"created_at,omitempty"`
 	UpdatedAt    time.Time `json:"updated_at,omitempty"`
-	Store        Store     `gorm:"foreignKey:StoreID"`
+	// Store        Store     `gorm:"foreignKey:StoreID"`
 }
 
 func (user *User) TableName() string {
