@@ -38,12 +38,10 @@ func (c StoreRepository) FindAll(store models.Store, keyword string) (*[]models.
 	// Search parameter
 	if keyword != "" {
 		queryKeyword := "%" + keyword + "%"
-		queryBuilder = queryBuilder.Where("store_name LIKE ?", queryKeyword)
+		queryBuilder = queryBuilder.Where("store.store_name LIKE ?", queryKeyword)
 	}
 
 	err := queryBuilder.
-		Preload("Category").
-		Preload("OpenTimes").
 		Where(store).
 		Find(&stores).
 		Count(&totalRows).Error

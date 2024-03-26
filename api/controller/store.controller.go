@@ -278,6 +278,8 @@ func (c StoreController) SearchStoreSortDistance(ctx *gin.Context) {
 	keyword := searchInput.Search
 
 	originLocation := searchInput.Location
+	fmt.Printf("originLocation ID: %s\n", originLocation)
+
 	if searchInput.Location == "" {
 		util.ErrorJSON(ctx, http.StatusBadRequest, "originLocation is required")
 		return
