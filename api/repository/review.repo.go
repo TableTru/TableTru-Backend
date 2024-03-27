@@ -29,6 +29,7 @@ func (c ReviewRepository) FindAll(review models.Review, keyword string) (*[]mode
 	}
 
 	err := queryBuider.
+		Preload("User").
 		Where(review).
 		Find(&reviews).
 		Count(&totalRows).Error
@@ -38,6 +39,7 @@ func (c ReviewRepository) FindAll(review models.Review, keyword string) (*[]mode
 func (c ReviewRepository) Find(review models.Review) (models.Review, error) {
 	var reviews models.Review
 	err := c.db.DB.
+		Preload("User").
 		Debug().
 		Model(&models.Review{}).
 		Where(&review).
