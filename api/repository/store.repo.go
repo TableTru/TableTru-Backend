@@ -38,7 +38,7 @@ func (c StoreRepository) FindAll(store models.Store, keyword string) (*[]models.
 	// Search parameter
 	if keyword != "" {
 		queryKeyword := "%" + keyword + "%"
-		queryBuilder = queryBuilder.Where("store.store_name LIKE ?", queryKeyword)
+		queryBuilder = queryBuilder.Where("store.Name LIKE ?", queryKeyword)
 	}
 
 	err := queryBuilder.
@@ -79,7 +79,7 @@ func (c StoreRepository) FindbyNumber(store models.Store, keyword string, num in
 	// Search parameter
 	if keyword != "" {
 		queryKeyword := "%" + keyword + "%"
-		queryBuilder = queryBuilder.Where("store.store_name LIKE ?", queryKeyword)
+		queryBuilder = queryBuilder.Where("store.Name LIKE ?", queryKeyword)
 	}
 
 	err := queryBuilder.
@@ -99,7 +99,7 @@ func (c StoreRepository) SearchStoreRatingSort(store models.Store, keyword strin
 	// Search parameter
 	if keyword != "" {
 		queryKeyword := "%" + keyword + "%"
-		queryBuilder = queryBuilder.Where("store.store_name LIKE ?", queryKeyword)
+		queryBuilder = queryBuilder.Where("store.Name LIKE ?", queryKeyword)
 	}
 
 	err := queryBuilder.
@@ -124,7 +124,7 @@ func (c StoreRepository) SearchStoreRatingSort(store models.Store, keyword strin
 // 	// Search parameter
 // 	if keyword != "" {
 // 		queryKeyword := "%" + keyword + "%"
-// 		queryBuilder = queryBuilder.Where("store_name LIKE ?", queryKeyword)
+// 		queryBuilder = queryBuilder.Where("Name LIKE ?", queryKeyword)
 // 	}
 
 // 	err := queryBuilder.
@@ -179,7 +179,7 @@ func (c StoreRepository) SearchStoreLocationSort(store models.Store, originLocat
 	// Search parameter
 	if keyword != "" {
 		queryKeyword := "%" + keyword + "%"
-		queryBuilder = queryBuilder.Where("store_name LIKE ?", queryKeyword)
+		queryBuilder = queryBuilder.Where("store.Name LIKE ?", queryKeyword)
 	}
 
 	err := queryBuilder.
@@ -190,48 +190,50 @@ func (c StoreRepository) SearchStoreLocationSort(store models.Store, originLocat
 	var destinations []string
 	var distances []models.StoreDistanceWithIndex
 
-	for _, store := range stores {
-		if store.Location != "" {
-			destinations = append(destinations, store.Location)
-		} else{
-			distances = append(distances, models.StoreDistanceWithIndex{
-				Index:    0,
-				StoreID:  int64(store.ID),
-				Distance: 0,
-				StoreLocationStatus: false,
-			})
+	if totalRows != 0 {
+		for _, store := range stores {
+			if store.Location != "" {
+				destinations = append(destinations, store.Location)
+			} else {
+				distances = append(distances, models.StoreDistanceWithIndex{
+					Index:               0,
+					StoreID:             int64(store.ID),
+					Distance:            0,
+					StoreLocationStatus: false,
+				})
+			}
 		}
-	}
 
-	r := &maps.DistanceMatrixRequest{
-		Origins:      []string{originLocation},
-		Destinations: destinations,
-	}
-
-	resp, disTanceErr := client.DistanceMatrix(context.Background(), r)
-	if disTanceErr != nil {
-		log.Fatalf("DistanceMatrix request failed: %v", disTanceErr)
-	}
-
-	for _, row := range resp.Rows {
-		for j, element := range row.Elements {
-			distance := element.Distance.Meters / 1000 // convert to kilometers
-			distances = append(distances, models.StoreDistanceWithIndex{
-				Index:    j,
-				StoreID:  int64(stores[j].ID),
-				Distance: distance,
-				StoreLocationStatus: true,
-			})
-			fmt.Printf("Distance from %s to %s: %d km\n", originLocation, destinations[j], distance)
+		r := &maps.DistanceMatrixRequest{
+			Origins:      []string{originLocation},
+			Destinations: destinations,
 		}
-	}
 
-	for _, store := range stores {
-		fmt.Printf("ID: %d, Location: %s\n", store.ID, store.Location)
-	}
+		resp, disTanceErr := client.DistanceMatrix(context.Background(), r)
+		if disTanceErr != nil {
+			log.Fatalf("DistanceMatrix request failed: %v", disTanceErr)
+		}
 
-	for _, distance := range distances {
-		fmt.Printf("Index: %d, Distance: %d\n", distance.Index, distance.Distance)
+		for _, row := range resp.Rows {
+			for j, element := range row.Elements {
+				distance := element.Distance.Meters / 1000 // convert to kilometers
+				distances = append(distances, models.StoreDistanceWithIndex{
+					Index:               j,
+					StoreID:             int64(stores[j].ID),
+					Distance:            distance,
+					StoreLocationStatus: true,
+				})
+				fmt.Printf("Distance from %s to %s: %d km\n", originLocation, destinations[j], distance)
+			}
+		}
+
+		for _, store := range stores {
+			fmt.Printf("ID: %d, Location: %s\n", store.ID, store.Location)
+		}
+
+		for _, distance := range distances {
+			fmt.Printf("Index: %d, Distance: %d\n", distance.Index, distance.Distance)
+		}
 	}
 
 	return &stores, totalRows, distances, err

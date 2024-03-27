@@ -48,56 +48,60 @@ func (c StoreService) SearchStoreRatingSort(store models.Store, keyword string) 
 }
 
 func (c StoreService) SearchStoreLocationSort(store models.Store, originLocation string, keyword string) ([]models.Store, int64, error) {
-    stores, totalRows, distancesArray, err := c.repository.SearchStoreLocationSort(store, originLocation, keyword)
+	stores, totalRows, distancesArray, err := c.repository.SearchStoreLocationSort(store, originLocation, keyword)
 
-	filter := func(arr []models.StoreDistanceWithIndex) []models.StoreDistanceWithIndex {
-		var filtered []models.StoreDistanceWithIndex
-		for _, d := range arr {
-			if d.StoreLocationStatus {
-				filtered = append(filtered, d)
+	if totalRows != 0 {
+		filter := func(arr []models.StoreDistanceWithIndex) []models.StoreDistanceWithIndex {
+			var filtered []models.StoreDistanceWithIndex
+			for _, d := range arr {
+				if d.StoreLocationStatus {
+					filtered = append(filtered, d)
+				}
 			}
+			return filtered
 		}
-		return filtered
+
+		// Filter out elements where StoreLocationStatus is false
+		newDistances := filter(distancesArray)
+
+		sort.Slice(newDistances, func(i, j int) bool {
+			return newDistances[i].Distance < newDistances[j].Distance
+		})
+
+		// Print the sorted distances
+		for _, distance := range newDistances {
+			fmt.Printf("Store ID: %d, Distance: %d\n", distance.StoreID, distance.Distance)
+		}
+
+		filterStores := func(arr []models.Store, distArr []models.StoreDistanceWithIndex) []models.Store {
+			var filtered []models.Store
+			for _, s := range arr {
+				for _, d := range distArr {
+					if s.ID == d.StoreID {
+						filtered = append(filtered, s)
+						break
+					}
+				}
+			}
+			return filtered
+		}
+
+		// Filter stores based on ID matching StoreID in newDistances
+		filteredStores := filterStores(*stores, newDistances)
+
+		// Create a map of StoreID to index in newDistances
+		distanceIndexMap := make(map[int64]int)
+		for i, distance := range newDistances {
+			distanceIndexMap[distance.StoreID] = i
+		}
+
+		sort.SliceStable(filteredStores, func(i, j int) bool {
+			return distanceIndexMap[int64(filteredStores[i].ID)] < distanceIndexMap[int64(filteredStores[j].ID)]
+		})
+
+		return filteredStores, totalRows, err
+	} else {
+		return *stores, totalRows, err
 	}
 
-	// Filter out elements where StoreLocationStatus is false
-	newDistances := filter(distancesArray)
-	
-	sort.Slice(newDistances, func(i, j int) bool {
-		return newDistances[i].Distance < newDistances[j].Distance
-	})
-
-	// Print the sorted distances
-	for _, distance := range newDistances {
-		fmt.Printf("Store ID: %d, Distance: %d\n", distance.StoreID, distance.Distance)
-	}
-
-	filterStores := func(arr []models.Store, distArr []models.StoreDistanceWithIndex) []models.Store {
-        var filtered []models.Store
-        for _, s := range arr {
-            for _, d := range distArr {
-                if s.ID == d.StoreID {
-                    filtered = append(filtered, s)
-                    break
-                }
-            }
-        }
-        return filtered
-    }
-
-    // Filter stores based on ID matching StoreID in newDistances
-    filteredStores := filterStores(*stores, newDistances)
-
-	// Create a map of StoreID to index in newDistances
-    distanceIndexMap := make(map[int64]int)
-    for i, distance := range newDistances {
-        distanceIndexMap[distance.StoreID] = i
-    }
-
-    sort.SliceStable(filteredStores, func(i, j int) bool {
-		return distanceIndexMap[int64(filteredStores[i].ID)] < distanceIndexMap[int64(filteredStores[j].ID)]
-	})
-
-
-    return filteredStores, totalRows, err
 }

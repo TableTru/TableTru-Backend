@@ -256,14 +256,16 @@ func (c StoreController) SearchStoreSortDistance(ctx *gin.Context) {
 	search := ctx.Query("search")
 	originLocation := ctx.Query("location")
 	categoryIDString := ctx.Query("categoryID")
-	categoryID, err := strconv.ParseInt(categoryIDString, 10, 64) //type conversion string to int64
-	if err != nil {
-		util.ErrorJSON(ctx, http.StatusBadRequest, "id invalid")
-		return
-	}
+	if categoryIDString != "" {
+		categoryID, err := strconv.ParseInt(categoryIDString, 10, 64) //type conversion string to int64
+		if err != nil {
+			util.ErrorJSON(ctx, http.StatusBadRequest, "id invalid")
+			return
+		}
 
-	if categoryID != 0 {
-		stores.CategoryID = categoryID
+		if categoryID != 0 {
+			stores.CategoryID = categoryID
+		}
 	}
 
 	fmt.Printf("originLocation: %s\n", originLocation)
