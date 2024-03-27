@@ -270,30 +270,26 @@ func (c StoreController) SearchStoreSortRating(ctx *gin.Context) {
 }
 
 func (c StoreController) SearchStoreSortDistance(ctx *gin.Context) {
-	var searchInput models.SearchInput
 	var stores models.Store
 
-	ctx.ShouldBindJSON(&searchInput)
-
-	keyword := searchInput.Search
-
-	originLocation := searchInput.Location
-	fmt.Printf("originLocation ID: %s\n", originLocation)
-
-	if searchInput.Location == "" {
-		util.ErrorJSON(ctx, http.StatusBadRequest, "originLocation is required")
+	search := ctx.Query("search")
+	originLocation := ctx.Query("location")
+	categoryIDString := ctx.Query("categoryID")
+	categoryID, err := strconv.ParseInt(categoryIDString, 10, 64) //type conversion string to int64
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "id invalid")
 		return
+	}
+	
+	if categoryID != 0 {
+		stores.CategoryID = categoryID
 	}
 
 	fmt.Printf("originLocation: %s\n", originLocation)
 
-	if searchInput.CategoryID != 0 {
-		stores.CategoryID = searchInput.CategoryID
-	}
-
 	respArr := make([]map[string]interface{}, 0)
 
-	data, total,  err := c.service.SearchStoreLocationSort(stores,originLocation, keyword)
+	data, total,  err := c.service.SearchStoreLocationSort(stores,originLocation, search)
 
 	if err != nil {
 		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
