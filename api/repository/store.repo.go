@@ -53,8 +53,6 @@ func (c StoreRepository) Find(store models.Store) (models.Store, error) {
 	err := c.db.DB.
 		Debug().
 		Model(&models.Store{}).
-		Preload("Category").
-		Preload("OpenTimes").
 		Where(&store).
 		Take(&stores).Error
 	return stores, err
@@ -86,7 +84,6 @@ func (c StoreRepository) FindbyNumber(store models.Store, keyword string, num in
 
 	err := queryBuilder.
 		Limit(num).
-		Preload("OpenTimes").
 		Where(store).
 		Find(&stores).
 		Count(&totalRows).Error
@@ -106,8 +103,6 @@ func (c StoreRepository) SearchStoreRatingSort(store models.Store, keyword strin
 	}
 
 	err := queryBuilder.
-		Preload("Category").
-		Preload("OpenTimes").
 		Where(store).
 		Find(&stores).
 		Count(&totalRows).Error
@@ -188,8 +183,6 @@ func (c StoreRepository) SearchStoreLocationSort(store models.Store, originLocat
 	}
 
 	err := queryBuilder.
-		Preload("Category").
-		Preload("OpenTimes").
 		Where(store).
 		Find(&stores).
 		Count(&totalRows).Error

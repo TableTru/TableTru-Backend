@@ -225,47 +225,28 @@ func (c StoreController) SearchStoreSortRating(ctx *gin.Context) {
 
 	respArr := make([]map[string]interface{}, 0)
 
-	//เรียงตาม rating
 	if searchInput.CategoryID != 0 {
 		stores.CategoryID = searchInput.CategoryID
-		data, total, err := c.service.SearchStoreRatingSort(stores, keyword)
-		if err != nil {
-			util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
-			return
-		}
-
-		for _, n := range *data {
-			resp := n.ResponseMap()
-			respArr = append(respArr, resp)
-		}
-
-		ctx.JSON(http.StatusOK, &util.Response{
-			Success: true,
-			Message: "Store result set",
-			Data: map[string]interface{}{
-				"rows":       respArr,
-				"total_rows": total,
-			}})
-	} else {
-		data, total, err := c.service.FindAllStore(stores, keyword)
-		if err != nil {
-			util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
-			return
-		}
-
-		for _, n := range *data {
-			resp := n.ResponseMap()
-			respArr = append(respArr, resp)
-		}
-
-		ctx.JSON(http.StatusOK, &util.Response{
-			Success: true,
-			Message: "Store result set",
-			Data: map[string]interface{}{
-				"rows":       respArr,
-				"total_rows": total,
-			}})
 	}
+
+	data, total, err := c.service.SearchStoreRatingSort(stores, keyword)
+	if err != nil {
+		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
+		return
+	}
+
+	for _, n := range *data {
+		resp := n.ResponseMap()
+		respArr = append(respArr, resp)
+	}
+
+	ctx.JSON(http.StatusOK, &util.Response{
+		Success: true,
+		Message: "Store result set",
+		Data: map[string]interface{}{
+			"rows":       respArr,
+			"total_rows": total,
+		}})
 
 }
 
@@ -280,7 +261,7 @@ func (c StoreController) SearchStoreSortDistance(ctx *gin.Context) {
 		util.ErrorJSON(ctx, http.StatusBadRequest, "id invalid")
 		return
 	}
-	
+
 	if categoryID != 0 {
 		stores.CategoryID = categoryID
 	}
@@ -289,7 +270,7 @@ func (c StoreController) SearchStoreSortDistance(ctx *gin.Context) {
 
 	respArr := make([]map[string]interface{}, 0)
 
-	data, total,  err := c.service.SearchStoreLocationSort(stores,originLocation, search)
+	data, total, err := c.service.SearchStoreLocationSort(stores, originLocation, search)
 
 	if err != nil {
 		util.ErrorJSON(ctx, http.StatusBadRequest, "Failed to find questions")
