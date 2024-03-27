@@ -25,6 +25,7 @@ func (review *Review) ResponseMap() map[string]interface{} {
 	resp["store_id"] = review.StoreID
 	resp["user_id"] = review.UserID
 	resp["username"] = review.User.Username
+	resp["profile_image"] = review.User.ProfileImage 
 	resp["review_comment"] = review.Comment
 	resp["rating_score"] = review.RatingScore
 	resp["rating_status"] = review.RatingStatus
